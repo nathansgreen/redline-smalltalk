@@ -41,7 +41,7 @@ else
 
   # load user redline configuration
   if [ -f "$HOME/.redline/redline.conf" ] ; then
-    . $HOME/.redline/redline.conf
+    . "$HOME/.redline/redline.conf"
   fi
   if [ -f "$HOME/.redlinerc" ] ; then
     . "$HOME/.redlinerc"
@@ -68,7 +68,7 @@ fi
 # OS specific support.  $var _must_ be set to either true or false.
 cygwin=false;
 darwin=false;
-case "`uname`" in
+case "$(uname)" in
   CYGWIN*) cygwin=true ;;
   Darwin*) darwin=true
            if [ -z "$JAVA_HOME" ] ; then
@@ -80,31 +80,30 @@ esac
 if [ -z "$REDLINE_HOME" -o ! -d "$REDLINE_HOME" ] ; then
   ## resolve links - $0 may be a link to redline's home
   PRG="$0"
-  progname=`basename "$0"`
 
   # need this for relative symlinks
   while [ -h "$PRG" ] ; do
-    ls=`ls -ld "$PRG"`
-    link=`expr "$ls" : '.*-> \(.*\)$'`
+    ls=$(ls -ld "$PRG")
+    link=$(expr "$ls" : '.*-> \(.*\)$')
     if expr "$link" : '/.*' > /dev/null; then
     PRG="$link"
     else
-    PRG=`dirname "$PRG"`"/$link"
+    PRG=$(dirname "$PRG")"/$link"
     fi
   done
 
-  REDLINE_HOME=`dirname "$PRG"`/..
+  REDLINE_HOME=$(dirname "$PRG")/..
 
   # make it fully qualified
-  REDLINE_HOME=`cd "$REDLINE_HOME" > /dev/null && pwd`
+  REDLINE_HOME=$(cd "$REDLINE_HOME" > /dev/null && pwd)
 fi
 
 # For Cygwin, ensure paths are in UNIX format before anything is touched
 if $cygwin ; then
   [ -n "$REDLINE_HOME" ] &&
-    REDLINE_HOME=`cygpath --unix "$REDLINE_HOME"`
+    REDLINE_HOME=$(cygpath --unix "$REDLINE_HOME")
   [ -n "$JAVA_HOME" ] &&
-    JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
+    JAVA_HOME=$(cygpath --unix "$JAVA_HOME")
 fi
 
 # set REDLINE_LIB location
@@ -121,7 +120,7 @@ if [ -z "$JAVACMD" ] ; then
       JAVACMD="$JAVA_HOME/bin/java"
     fi
   else
-    JAVACMD=`which java 2> /dev/null `
+    JAVACMD=$(which java 2> /dev/null )
     if [ -z "$JAVACMD" ] ; then
         JAVACMD=java
     fi
@@ -154,7 +153,7 @@ if $rpm_mode && [ -x /usr/bin/build-classpath ] ; then
         *.rpmsave) ;;
         *.rpmnew) ;;
         *)
-          for dep in `cat "$file"`; do
+          for dep in $(cat "$file"); do
             case "$OPT_JAR_LIST" in
             *"$dep"*) ;;
             *) OPT_JAR_LIST="$OPT_JAR_LIST${OPT_JAR_LIST:+ }$dep"
@@ -243,25 +242,25 @@ if $cygwin; then
   else
     format=windows
   fi
-  REDLINE_HOME=`cygpath --$format "$REDLINE_HOME"`
-  REDLINE_LIB=`cygpath --$format "$REDLINE_LIB"`
-  JAVA_HOME=`cygpath --$format "$JAVA_HOME"`
-  LCP_TEMP=`cygpath --path --unix "$LOCALCLASSPATH"`
-  LOCALCLASSPATH=`cygpath --path --$format "$LCP_TEMP"`
+  REDLINE_HOME=$(cygpath --$format "$REDLINE_HOME")
+  REDLINE_LIB=$(cygpath --$format "$REDLINE_LIB")
+  JAVA_HOME=$(cygpath --$format "$JAVA_HOME")
+  LCP_TEMP=$(cygpath --path --unix "$LOCALCLASSPATH")
+  LOCALCLASSPATH=$(cygpath --path --$format "$LCP_TEMP")
   if [ -n "$CLASSPATH" ] ; then
-    CP_TEMP=`cygpath --path --unix "$CLASSPATH"`
-    CLASSPATH=`cygpath --path --$format "$CP_TEMP"`
+    CP_TEMP=$(cygpath --path --unix "$CLASSPATH")
+    CLASSPATH=$(cygpath --path --$format "$CP_TEMP")
   fi
-  CYGHOME=`cygpath --$format "$HOME"`
+  CYGHOME=$(cygpath --$format "$HOME")
 fi
 
 # Show script help if requested
 if $show_help ; then
-  echo $0 '[script options] [options] [target [target2 [target3] ..]]'
+  echo "$0 [script options] [options] [target [target2 [target3] ..]]"
   echo 'Script Options:'
   echo '  --help, --h            print this message and stic help'
   echo '  --noconfig             suppress sourcing of /etc/redline.conf,'
-  echo '                         $HOME/.redline/redline.conf, and $HOME/.redlinerc'
+  echo "                         \$HOME/.redline/redline.conf, and \$HOME/.redlinerc"
   echo '                         configuration files'
   echo '  --usejikes             enable use of jikes by default, unless'
   echo '                         set explicitly in configuration files'
